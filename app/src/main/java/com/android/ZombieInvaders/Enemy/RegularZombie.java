@@ -28,8 +28,8 @@ public class RegularZombie extends Zombie {
     public void update() {
         super.update();
         super.startAnimate();
-        System.out.println(target.getCollidingObject());
-        System.out.println("zombie: " +getCollidingObject());
+        //System.out.println(target.getCollidingObject());
+        //System.out.println("zombie: " +getCollidingObject());
         if(getCollidingObject() == target.getCollidingObject()){
             //System.out.println("lol");
         }

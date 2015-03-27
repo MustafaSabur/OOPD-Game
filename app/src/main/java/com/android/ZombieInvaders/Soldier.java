@@ -25,7 +25,7 @@ public class Soldier extends MoveableGameObject implements ICollision, IAlarm {
     private int ammo;
     private static boolean ableToFire = true;
     private Alarm fireRate;
-    private static int walkingSpeed = -10;
+    private static int walkingSpeed = -20;
 
 	public Soldier(ZombieInvaders mygame)
 	{

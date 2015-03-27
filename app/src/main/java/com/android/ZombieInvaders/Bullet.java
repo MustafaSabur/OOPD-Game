@@ -25,7 +25,7 @@ public class Bullet extends MoveableGameObject implements ICollision {
      */
     public Bullet(ZombieInvaders mygame) {
         this.mygame = mygame;
-        setSprite("bullet");
+        setSprite("raket");
         setSpeed(50);
         setDirection(0);
 

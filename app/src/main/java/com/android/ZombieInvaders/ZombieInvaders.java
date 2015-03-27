@@ -23,7 +23,6 @@ public class ZombieInvaders extends GameEngine {
     private ZombieLand zombieLand;
 	private Soldier soldier; // MoveableGmeObject Soldier, player in the game
 	private DashboardTextView scoreDisplay, ammoDisplay; //Dashboard for displaying the score and ammo
-    MusicPlayer bgMusic; //musicplayer for background music
     private Zombie zombie1;
     private int level = 1;
 
@@ -47,8 +46,7 @@ public class ZombieInvaders extends GameEngine {
 		addGameObject(soldier, 850, getScreenHeight()*5-200);
 
         //add background music
-        bgMusic = new MusicPlayer();
-        //bgMusic.play("doomtheme", true);
+        MusicPlayer.play("doomtheme", true);
 
         //create zombies
         zombie1 = new RegularZombie(soldier);
