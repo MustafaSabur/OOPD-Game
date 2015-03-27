@@ -1,10 +1,6 @@
 package com.android.ZombieInvaders.Enemy;
 
-import java.util.List;
-
 import android.gameengine.icadroids.objects.MoveableGameObject;
-import android.gameengine.icadroids.objects.collisions.ICollision;
-import android.gameengine.icadroids.objects.collisions.TileCollision;
 
 /**
  * Zombie is a abstract MoveableGameObject class.

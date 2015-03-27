@@ -1,17 +1,15 @@
 package com.android.ZombieInvaders;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import android.gameengine.icadroids.alarms.Alarm;
 import android.gameengine.icadroids.alarms.IAlarm;
-import android.gameengine.icadroids.input.MotionSensor;
-import android.gameengine.icadroids.input.OnScreenButton;
+import android.gameengine.icadroids.dashboard.DashboardImageView;
 import android.gameengine.icadroids.input.OnScreenButtons;
 import android.gameengine.icadroids.objects.GameObject;
 import android.gameengine.icadroids.objects.MoveableGameObject;
-import android.gameengine.icadroids.objects.collisions.ICollision;
-import android.gameengine.icadroids.objects.collisions.TileCollision;
+
+import com.android.ZombieInvaders.Enemy.Zombie;
 
 /**
  * Soldier is the main player object of the game. It moves forward through the game.
@@ -19,23 +17,27 @@ import android.gameengine.icadroids.objects.collisions.TileCollision;
  * when a zombie touches the soldier, he will lose one life.
  * @author Mustafa Sabur and Okan ok
  */
-public class Soldier extends MoveableGameObject implements ICollision, IAlarm {
+public class Soldier extends MoveableGameObject implements IAlarm {
 	private ZombieInvaders mygame;
 	private int score;
     private int ammo;
-    private static boolean ableToFire = true;
-    private Alarm fireRate;
-    private static int walkingSpeed = -20;
+    private static boolean ableToFire, ableToDie = true;
+    private Alarm fireRate, dyingRate;
+    private final int WALKINGSPEED = -5;
+    private final int SLOW_WALKINGSPEED = -5;
+    private int hp = 3;
 
 	public Soldier(ZombieInvaders mygame)
 	{
 		this.mygame = mygame;
 		setSprite("soldier", 8);
         setAnimationSpeed(3);
-        setySpeed(walkingSpeed);
+        setySpeed(WALKINGSPEED);
         ammo = 100;
         score = 0;
         fireRate = new Alarm(5, 15, this);
+        dyingRate = new Alarm(6, 15, this);
+        dyingRate.startAlarm();
         fireRate.startAlarm();
 	}
 
@@ -67,39 +69,52 @@ public class Soldier extends MoveableGameObject implements ICollision, IAlarm {
         }
 
         if(getX() < 150 || getX() > (mygame.getScreenWidth() - 280)){
-            setySpeed(-5);
+            setySpeed(SLOW_WALKINGSPEED);
         }
-        else setySpeed(walkingSpeed);
+        else setySpeed(WALKINGSPEED);
 
 		// collisions with objects
 		ArrayList<GameObject> gebotst = getCollidedObjects();
-//		if (gebotst != null)
-//		{
-//			for (GameObject g : gebotst)
-//			{
+		if (gebotst != null)
+		{
+			for (GameObject g : gebotst)
+			{
 //				if (g instanceof Bullet)
 //				{
 //					score = score + ((Bullet) g).getPoints();
-//					// Log.d("hapje!!!", "score is nu " + score);
+//					Log.d("hapje!!!", "score is nu " + score);
 //					mygame.deleteGameObject(g);
-//				} else if (g instanceof Zombie)
-//				{
-//					// Log.d("Gepakt", "Ai, wat nu...");
-//				}
-//			}
-//		}
-		// Handle input. Both on screen buttons and tilting are supported.
-		// Buttons take precedence.
-		boolean buttonPressed = false;
+//				} else
+                if (g instanceof Zombie)
+				{
+                    ((Zombie) g).setySpeed(WALKINGSPEED);
+				    //System.out.println("Geraakt");
 
-		if (OnScreenButtons.dPadRight
-				|| (MotionSensor.tiltRight && !buttonPressed))
+                    if(hp > 0 && ableToDie) {
+                        ableToDie = false;
+                        dyingRate.restartAlarm();
+                        System.out.println(""+ hp);
+                        mygame.getHearts().get(hp-1).setResourceName("empty");
+                        hp--;
+                    }
+                    else if (hp <= 0){
+                        mygame.pause();
+                        mygame.addToDashboard(new DashboardImageView(mygame, "gameover"));
+                    }
+				}
+//                else{
+//                    ((Zombie) g).setySpeed(20);
+//                }
+			}
+		}
+
+		// Handle input.
+		if (OnScreenButtons.dPadRight && getX() < mygame.getScreenWidth() - 100)
 		{
             movePlayer(10, 0);
 			//setX(getX() + 10);
 		}
-		if (OnScreenButtons.dPadLeft
-				|| (MotionSensor.tiltLeft && !buttonPressed))
+		if (OnScreenButtons.dPadLeft && getX() > -20)
 		{
             movePlayer(-10, 0);
             //setX(getX() - 10);
@@ -134,29 +149,6 @@ public class Soldier extends MoveableGameObject implements ICollision, IAlarm {
 	}
 
 	/**
-	 * Handle tile collisions.
-	 * 
-	 * @see android.gameengine.icadroids.objects.collisions.ICollision#collisionOccurred(java.util.List)
-	 */
-	@Override
-	public void collisionOccurred(List<TileCollision> collidedTiles)
-	{
-//		for (TileCollision tc : collidedTiles)
-//		{
-//			if (tc.theTile.getTileType() < 3)
-//			{
-//                setySpeed(-5);
-//                //moveUpToTileSide(tc);
-//                //movePlayer(-200, 0);
-//                //undoMove();
-//				//
-//				//break;
-//			}
-//            else setySpeed(-20);
-//		}
-	}
-
-	/**
 	 * Get the score
 	 * 
 	 * @return current value of score
@@ -168,6 +160,14 @@ public class Soldier extends MoveableGameObject implements ICollision, IAlarm {
 
     @Override
     public void triggerAlarm(int alarmID) {
-        ableToFire = true;
+        switch (alarmID){
+            case 5:
+                ableToFire = true;
+                break;
+            case 6:
+                ableToDie = true;
+                break;
+        }
+
     }
 }

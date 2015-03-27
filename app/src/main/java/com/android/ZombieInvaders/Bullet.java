@@ -1,12 +1,8 @@
 package com.android.ZombieInvaders;
 
-import android.gameengine.icadroids.alarms.Alarm;
-import android.gameengine.icadroids.alarms.IAlarm;
-import android.gameengine.icadroids.engine.Viewport;
 import android.gameengine.icadroids.objects.*;
 import android.gameengine.icadroids.objects.collisions.ICollision;
 import android.gameengine.icadroids.objects.collisions.TileCollision;
-import android.util.Log;
 
 import java.util.List;
 
@@ -38,15 +34,10 @@ public class Bullet extends MoveableGameObject implements ICollision {
         setDirection(direction);
     }
 
-
-
-
     @Override
     public void collisionOccurred(List<TileCollision> collidedTiles) {
 
     }
-
-
 
     /**
      * Update Bullet every cycle of the game loop.
@@ -56,7 +47,7 @@ public class Bullet extends MoveableGameObject implements ICollision {
     public void update() {
         super.update();
         if (!mygame.isInViewport(this) && this.getY() < mygame.getScreenHeight()*4){
-            mygame.deleteGameObject(this);
+            deleteThisGameObject();
             mygame.printDebugInfo("bullet", "deleted");
         }
     }

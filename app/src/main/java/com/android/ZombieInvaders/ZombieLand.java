@@ -1,6 +1,13 @@
 package com.android.ZombieInvaders;
 
+import android.gameengine.icadroids.dashboard.DashboardImageView;
+import android.gameengine.icadroids.dashboard.DashboardTextView;
+import android.gameengine.icadroids.engine.GameEngine;
 import android.gameengine.icadroids.tiles.GameTiles;
+import android.graphics.Color;
+import android.util.TypedValue;
+import android.view.View;
+
 import java.util.Random;
 
 /**
@@ -8,19 +15,8 @@ import java.util.Random;
  */
 public class ZombieLand{
 
-    private GameTiles myTiles;
-
-    public ZombieLand(int level){
-        myTiles = createTileEnvironment(level);
-
-    }
-
-    public GameTiles getMyTiles() {
-        return myTiles;
-    }
-
-    public GameTiles createTileEnvironment(int level) {
-        String[] tileImagesNames = { "tree1", "tree2", "tree3", "bgtexture", "bgtexture", "bgtexture", "bgtexture1", "bgtexture2"};
+    public static GameTiles createTileEnvironment(int level) {
+        String[] tileImagesNames = { "tree1", "tree2", "tree3", "empty", "empty", "empty", "empty", "bgtexture2"};
 
         Random r = new Random();
 
@@ -43,8 +39,37 @@ public class ZombieLand{
 
         GameTiles Tiles = new GameTiles(tileImagesNames, tilemap, 96);
         return Tiles;
-        //setTileMap(myTiles);
-        //Log.d("ZombieInvaders", "GameTiles created");
     }
 
+    public static void createDashboard(View d, int x, int y, int height){
+
+        if(d instanceof DashboardTextView) {
+            ((DashboardTextView)d).setTextSize(TypedValue.COMPLEX_UNIT_DIP, 24);
+            ((DashboardTextView)d).setTextColor(Color.LTGRAY);
+            ((DashboardTextView)d).setWidgetBackgroundColor(Color.argb(170, 100, 150, 100));
+            ((DashboardTextView)d).setWidgetX(x);
+            ((DashboardTextView)d).setWidgetY(y);
+            ((DashboardTextView)d).setWidgetHeight(height);
+            ((DashboardTextView)d).setWidgetWidth(450);
+            //((DashboardTextView) d).setTextAlignment(View.TEXT_ALIGNMENT_TEXT_END);
+        }
+        else if (d instanceof DashboardImageView) {
+            ((DashboardImageView)d).setWidgetX(x);
+            ((DashboardImageView)d).setWidgetY(y);
+            ((DashboardImageView)d).setWidgetHeight(height);
+            //((DashboardImageView)d).setWidgetWidth(400);
+
+        }
+    }
+
+    public static String bgImage(int level){
+        switch (level){
+            case 1:
+                return "backgroundgrass";
+
+            default:
+                return "backgroundgrass";
+
+        }
+    }
 }
