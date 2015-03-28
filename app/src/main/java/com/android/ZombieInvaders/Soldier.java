@@ -23,7 +23,7 @@ public class Soldier extends MoveableGameObject implements IAlarm {
     private int ammo;
     private static boolean ableToFire, ableToDie = true;
     private Alarm fireRate, dyingRate;
-    private final int WALKINGSPEED = -5;
+    private final int WALKINGSPEED = -10;
     private final int SLOW_WALKINGSPEED = -5;
     private int hp = 3;
 
@@ -85,26 +85,24 @@ public class Soldier extends MoveableGameObject implements IAlarm {
 //					Log.d("hapje!!!", "score is nu " + score);
 //					mygame.deleteGameObject(g);
 //				} else
-                if (g instanceof Zombie)
-				{
-                    ((Zombie) g).setySpeed(WALKINGSPEED);
-				    //System.out.println("Geraakt");
+                if (g instanceof Zombie){
 
-                    if(hp > 0 && ableToDie) {
-                        ableToDie = false;
-                        dyingRate.restartAlarm();
-                        System.out.println(""+ hp);
-                        mygame.getHearts().get(hp-1).setResourceName("empty");
-                        hp--;
-                    }
-                    else if (hp <= 0){
-                        mygame.pause();
-                        mygame.addToDashboard(new DashboardImageView(mygame, "gameover"));
+                    if (g.getY() < getY() && g.getY() > getY()-100) {
+                        ((Zombie) g).setySpeed(WALKINGSPEED / 2);
+                        //System.out.println("Geraakt");
+
+                        if (hp > 0 && ableToDie) {
+                            ableToDie = false;
+                            dyingRate.restartAlarm();
+                            System.out.println("" + hp);
+                            mygame.getHearts().get(hp - 1).setResourceName("empty");
+                            hp--;
+                        } else if (hp <= 0) {
+                            mygame.pause();
+                            mygame.addToDashboard(new DashboardImageView(mygame, "gameover"));
+                        }
                     }
 				}
-//                else{
-//                    ((Zombie) g).setySpeed(20);
-//                }
 			}
 		}
 

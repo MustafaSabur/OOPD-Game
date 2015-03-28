@@ -50,5 +50,7 @@ public class Bullet extends MoveableGameObject implements ICollision {
             deleteThisGameObject();
             mygame.printDebugInfo("bullet", "deleted");
         }
+
+
     }
 }

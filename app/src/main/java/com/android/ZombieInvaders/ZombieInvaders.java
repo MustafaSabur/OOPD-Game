@@ -17,6 +17,7 @@ import android.view.View;
 
 import com.android.ZombieInvaders.Enemy.RegularZombie;
 import com.android.ZombieInvaders.Enemy.Zombie;
+import com.android.ZombieInvaders.Enemy.ZombieControler;
 
 import java.util.ArrayList;
 
@@ -33,6 +34,11 @@ public class ZombieInvaders extends GameEngine {
     private Zombie zombie1;
     private ArrayList<DashboardImageView> hearts = new ArrayList<>();
     private int level = 1;
+
+    public Soldier getSoldier() {
+        return soldier;
+    }
+
 
 
     public ArrayList<DashboardImageView> getHearts() {
@@ -59,13 +65,15 @@ public class ZombieInvaders extends GameEngine {
         //add player to the game
 		addGameObject(soldier, 850, getScreenHeight()*5-200);
 
+
         //add background music
         //MusicPlayer.play("doomtheme", true);
 
         //create zombies
-        zombie1 = new RegularZombie(soldier);
-        addGameObject(zombie1, getRandomX(0), soldier.getY()-500);
+        //zombie1 = new RegularZombie(soldier);
+        //addGameObject(zombie1, getRandomX(0), soldier.getY()-500);
 
+        ZombieControler zc = new ZombieControler(this, 20);
 
 
 

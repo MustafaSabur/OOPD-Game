@@ -45,8 +45,8 @@ public class ZombieLand{
 
         if(d instanceof DashboardTextView) {
             ((DashboardTextView)d).setTextSize(TypedValue.COMPLEX_UNIT_DIP, 24);
-            ((DashboardTextView)d).setTextColor(Color.LTGRAY);
-            ((DashboardTextView)d).setWidgetBackgroundColor(Color.argb(170, 100, 150, 100));
+            ((DashboardTextView)d).setTextColor(Color.GREEN);
+            ((DashboardTextView)d).setWidgetBackgroundColor(Color.argb(170, 150, 100, 100));
             ((DashboardTextView)d).setWidgetX(x);
             ((DashboardTextView)d).setWidgetY(y);
             ((DashboardTextView)d).setWidgetHeight(height);

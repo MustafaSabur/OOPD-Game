@@ -23,7 +23,7 @@ public class RegularZombie extends Zombie {
     @Override
     public void update() {
         super.update();
-        setSpeed(50);
+        setSpeed(5);
         //System.out.println(target.getCollidingObject());
         //System.out.println("zombie: " +getCollidingObject());
         if(getCollidingObject() == target.getCollidingObject()){
@@ -36,8 +36,8 @@ public class RegularZombie extends Zombie {
         }
 
         if(getY() > target.getY() + 200){
-            //deleteThisGameObject();
-            //System.out.println("RegularZombie deleted");
+            deleteThisGameObject();
+            System.out.println("RegularZombie deleted");
 
         }
     }
