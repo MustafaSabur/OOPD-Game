@@ -23,8 +23,8 @@ public class Soldier extends MoveableGameObject implements IAlarm {
     private int ammo;
     private static boolean ableToFire, ableToDie = true;
     private Alarm fireRate, dyingRate;
-    private final int WALKINGSPEED = -10;
-    private final int SLOW_WALKINGSPEED = -5;
+    private int walkingspeed = -10;
+    private int slowWalkingspeed = -5;
     private int hp = 3;
 
 	public Soldier(ZombieInvaders mygame)
@@ -32,7 +32,7 @@ public class Soldier extends MoveableGameObject implements IAlarm {
 		this.mygame = mygame;
 		setSprite("soldier", 8);
         setAnimationSpeed(3);
-        setySpeed(WALKINGSPEED);
+        setySpeed(walkingspeed);
         ammo = 100;
         score = 0;
         fireRate = new Alarm(5, 15, this);
@@ -53,6 +53,10 @@ public class Soldier extends MoveableGameObject implements IAlarm {
         return ammo;
     }
 
+    public void increaseScore(int scoreIncease) {
+        score = score + scoreIncease;
+    }
+
     public Bullet createBullet(){
         return new Bullet(mygame);
     }
@@ -69,15 +73,15 @@ public class Soldier extends MoveableGameObject implements IAlarm {
         }
 
         if(getX() < 150 || getX() > (mygame.getScreenWidth() - 280)){
-            setySpeed(SLOW_WALKINGSPEED);
+            setySpeed(slowWalkingspeed);
         }
-        else setySpeed(WALKINGSPEED);
+        else setySpeed(walkingspeed);
 
 		// collisions with objects
-		ArrayList<GameObject> gebotst = getCollidedObjects();
-		if (gebotst != null)
+		ArrayList<GameObject> gotHit = getCollidedObjects();
+		if (gotHit != null)
 		{
-			for (GameObject g : gebotst)
+			for (GameObject g : gotHit)
 			{
 //				if (g instanceof Bullet)
 //				{
@@ -88,7 +92,7 @@ public class Soldier extends MoveableGameObject implements IAlarm {
                 if (g instanceof Zombie){
 
                     if (g.getY() < getY() && g.getY() > getY()-100) {
-                        ((Zombie) g).setySpeed(WALKINGSPEED / 2);
+                        ((Zombie) g).setySpeed(walkingspeed / 2);
                         //System.out.println("Geraakt");
 
                         if (hp > 0 && ableToDie) {

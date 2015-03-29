@@ -452,7 +452,7 @@ public class MoveableGameObject extends GameObject {
 	// Collision methods
 
 	/**
-	 * Checks wether or not this gameObject has collided with one or multiple
+	 * Checks whether or not this gameObject has collided with one or multiple
 	 * GameObjects or MovableGameObjects. It will return a list with the
 	 * collided objects, it returns a null if there is no collision.<br />
 	 * Call this method inside your <i>update()</i>, if you want to handle

@@ -14,12 +14,12 @@ public abstract class Zombie extends MoveableGameObject {
      * counts time (that is calls on update()). Using the counter, we can create
      * behaviour at certain updates only, instead of always.
      */
-    private int timeCounter;
+    protected int timeCounter;
     
     /**
      * The MoveableGameObject to be chased
      */
-    private MoveableGameObject target;
+    protected MoveableGameObject target;
 
     /**
      * Create a Zombie

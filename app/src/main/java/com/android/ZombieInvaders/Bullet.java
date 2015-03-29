@@ -4,12 +4,16 @@ import android.gameengine.icadroids.objects.*;
 import android.gameengine.icadroids.objects.collisions.ICollision;
 import android.gameengine.icadroids.objects.collisions.TileCollision;
 
+import com.android.ZombieInvaders.Enemy.RegularZombie;
+import com.android.ZombieInvaders.Enemy.Zombie;
+
+import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Bullet can be fired by the player in a straight line.
  */
-public class Bullet extends MoveableGameObject implements ICollision {
+public class Bullet extends MoveableGameObject{
 
     /**
      * reference to the game
@@ -34,14 +38,9 @@ public class Bullet extends MoveableGameObject implements ICollision {
         setDirection(direction);
     }
 
-    @Override
-    public void collisionOccurred(List<TileCollision> collidedTiles) {
-
-    }
 
     /**
      * Update Bullet every cycle of the game loop.
-     * @see android.gameengine.icadroids.objects.GameObject#update()
      */
     @Override
     public void update() {
@@ -50,7 +49,5 @@ public class Bullet extends MoveableGameObject implements ICollision {
             deleteThisGameObject();
             mygame.printDebugInfo("bullet", "deleted");
         }
-
-
     }
 }
