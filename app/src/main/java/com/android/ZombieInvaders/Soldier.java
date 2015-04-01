@@ -8,6 +8,7 @@ import android.gameengine.icadroids.dashboard.DashboardImageView;
 import android.gameengine.icadroids.input.OnScreenButtons;
 import android.gameengine.icadroids.objects.GameObject;
 import android.gameengine.icadroids.objects.MoveableGameObject;
+import android.gameengine.icadroids.sound.MusicPlayer;
 
 import com.android.ZombieInvaders.Enemy.Zombie;
 
@@ -23,7 +24,7 @@ public class Soldier extends MoveableGameObject implements IAlarm {
     private int ammo;
     private static boolean ableToFire, ableToDie = true;
     private Alarm fireRate, dyingRate;
-    private int walkingspeed = -10;
+    private int walkingspeed = -20;
     private int hp = 3;
 
 	public Soldier(ZombieInvaders mygame)
@@ -57,7 +58,7 @@ public class Soldier extends MoveableGameObject implements IAlarm {
     }
 
     public Bullet createBullet(){
-        return new Bullet(mygame);
+        return new Bullet(mygame, 50 -(walkingspeed));
     }
 
     /** update 'Soldier': handle collisions and input from buttons / motion sensor */
@@ -67,8 +68,8 @@ public class Soldier extends MoveableGameObject implements IAlarm {
 		super.update();
 
         super.startAnimate();
-        if(getY() <= 1000){
-            setY(getY()+(1080*4-200));
+        if(getY() <= 880){
+            setY(getY()+(1080*4 + (walkingspeed)));
         }
 
         if(getX() < 150 || getX() > (mygame.getScreenWidth() - 280)){
@@ -91,8 +92,8 @@ public class Soldier extends MoveableGameObject implements IAlarm {
                 if (g instanceof Zombie){
 
                     if (g.getY() < getY() && g.getY() > getY()-100) {
-                        ((Zombie) g).setySpeed(walkingspeed / 2);
                         if(!((Zombie)g).checkIfDead()) {
+                            ((Zombie) g).setySpeed(walkingspeed / 2);
                             if (hp > 0 && ableToDie) {
                                 ableToDie = false;
                                 dyingRate.restartAlarm();
@@ -102,6 +103,7 @@ public class Soldier extends MoveableGameObject implements IAlarm {
                             } else if (hp <= 0) {
                                 mygame.pause();
                                 mygame.addToDashboard(new DashboardImageView(mygame, "gameover"));
+                                MusicPlayer.stop();
                             }
                         }
                     }
@@ -124,8 +126,8 @@ public class Soldier extends MoveableGameObject implements IAlarm {
                 fireRate.restartAlarm();
                 mygame.addGameObject(createBullet(), (int) getCenterX(), (int) getCenterY() - 100);
                 mygame.vibrate(100);
-                if(getY() <= mygame.getScreenHeight() +1000){
-                    mygame.addGameObject(createBullet(), (int) getCenterX(), getY()+(mygame.getScreenHeight()*4));
+                if(getY() <= mygame.getScreenHeight()*2 - 200){
+                    mygame.addGameObject(createBullet(), (int) getCenterX(),(int) getCenterY()+(mygame.getScreenHeight()*4 - 100));
                 }
                 ammo--;
             }

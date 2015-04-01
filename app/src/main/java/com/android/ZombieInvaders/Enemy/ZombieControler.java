@@ -14,8 +14,8 @@ public class ZombieControler implements IAlarm {
     private ZombieInvaders mygame;
     private Alarm myAlarm;
     public static int nZombies;
-    Random r;
     private final int maxNZombies;
+    Random r;
 
     /**
      * Create a Controller and set the first Alarm,
@@ -35,11 +35,26 @@ public class ZombieControler implements IAlarm {
      * Set Alarm for next Zombie.
      */
     public void triggerAlarm(int alarmID) {
-        int x = r.nextInt(1920);
+        int x = r.nextInt(1800);
         int y = (mygame.getSoldier().getY() - 1500);
 
         if (nZombies < maxNZombies) {
-            Zombie z = new RegularZombie(mygame.getSoldier());
+            int zombieKind = r.nextInt(3);
+            Zombie z;
+            switch (zombieKind){
+                case 0:
+                    z = new CrawlerZombie(mygame.getSoldier());
+                    break;
+//                case 1:
+//                    z = new EliteZombie(mygame.getSoldier());
+//                    break;
+                case 2:
+                    z = new FoolishZombie(mygame.getSoldier());
+                    break;
+                default:
+                    z = new RegularZombie(mygame.getSoldier());
+                    break;
+            }
             mygame.addGameObject(z, x, y);
             nZombies++;
             mygame.printDebugInfo("zombie", "created");

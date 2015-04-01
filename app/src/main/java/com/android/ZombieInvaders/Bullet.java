@@ -16,10 +16,10 @@ public class Bullet extends MoveableGameObject {
     /**
      * Constructors of Bullet
      */
-    public Bullet(ZombieInvaders mygame) {
+    public Bullet(ZombieInvaders mygame, int speed) {
         this.mygame = mygame;
         setSprite("icebullet");
-        setSpeed(50);
+        setSpeed(speed);
         setDirection(0);
 
     }
@@ -29,6 +29,7 @@ public class Bullet extends MoveableGameObject {
 	    setSprite(image);
         setSpeed(speed);
         setDirection(direction);
+
     }
 
 

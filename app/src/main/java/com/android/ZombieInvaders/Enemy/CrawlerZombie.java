@@ -11,7 +11,7 @@ public class CrawlerZombie extends Zombie {
 
 
     public CrawlerZombie(MoveableGameObject player){
-        super(player,"regularzombie",8,200,40);
+        super(player,"czombie",18,200,40);
         setAnimationSpeed(3);
         startAnimate();
         setSpeed(2);
@@ -21,7 +21,7 @@ public class CrawlerZombie extends Zombie {
     public void update() {
         super.update();
 
-        doDeadAction("regularzombiedead",7,48);
+        doDeadAction("rzombiedead",7,48);
         moveToTarget();
         deleteIfOffScreen();
     }

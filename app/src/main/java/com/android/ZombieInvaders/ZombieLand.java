@@ -32,16 +32,16 @@ public class ZombieLand{
                     } else tilemap[i][j] = r.nextInt(4);
                 }
             }
-//            for (int i = 44; i < tilemap.length; i++) {
-//                for (int j = 0; j < tilemap[i].length; j++) {
-//                    tilemap[i][j] = tilemap[i - 44][j];
-//
-//                }
-//            }
+            for (int i = 36; i < tilemap.length; i++) {
+                for (int j = 0; j < tilemap[i].length; j++) {
+                    tilemap[i][j] = tilemap[i - 36][j];
+
+                }
+            }
             Tiles = new GameTiles(tileImagesNames, tilemap, 120);
 
         }else {
-            int tilemap[][] = new int[56][19];
+            int tilemap[][] = new int[45][15];
             tileImagesNames = new String[]{"tree1", "tree2", "tree3", "empty", "empty", "empty", "bgtexture1", "bgtexture2"};
 
             for (int i = 0; i < tilemap.length; i++) {
@@ -51,13 +51,13 @@ public class ZombieLand{
                     } else tilemap[i][j] = r.nextInt(3);
                 }
             }
-            for (int i = 44; i < tilemap.length; i++) {
+            for (int i = 36; i < tilemap.length; i++) {
                 for (int j = 0; j < tilemap[i].length; j++) {
-                    tilemap[i][j] = tilemap[i - 44][j];
+                    tilemap[i][j] = tilemap[i - 36][j];
 
                 }
             }
-            Tiles = new GameTiles(tileImagesNames, tilemap, 96);
+            Tiles = new GameTiles(tileImagesNames, tilemap, 120);
         }
 
 
@@ -83,8 +83,8 @@ public class ZombieLand{
     }
 
     public static String bgImage(int level){
-        if (level >= 3){
-            return "backgroundstreet";
+        if (level == 3){
+            return "empty";
         }
         else return "backgroundgrass";
     }

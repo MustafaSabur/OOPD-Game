@@ -1,21 +1,11 @@
 package com.android.ZombieInvaders.Enemy;
 
-import android.gameengine.icadroids.objects.GameObject;
 import android.gameengine.icadroids.objects.MoveableGameObject;
-
-import com.android.ZombieInvaders.Bullet;
-import com.android.ZombieInvaders.Soldier;
-
-import java.util.ArrayList;
 
 /**
  * @author Mustafa Sabur and Okan Ok
  */
 public class RegularZombie extends Zombie {
-
-    //private int timeCounter;
-    private MoveableGameObject target;
-
 
     public RegularZombie(MoveableGameObject target) {
         super(target, "rzombie",8, 100, 30);

@@ -64,15 +64,17 @@ public abstract class Zombie extends MoveableGameObject {
     public void update() {
         super.update();
 
+        if(target.getY() > getY() + 2500){
+            setY(getY() + (1080*4));
+        }
+
 
         ArrayList<GameObject> gotHit = getCollidedObjects();
         if (gotHit != null &&isDiying == false){
             for (GameObject g: gotHit){
                 if (g instanceof Bullet){
-                    deleteThisGameObject();
+                    hp = 0;
                     g.deleteThisGameObject();
-                    ((Soldier)target).increaseScore(20);
-                    ZombieControler.nZombies--;
                     isDiying = true;
                     if(hp > 0){
                         isDiying = false;
@@ -113,17 +115,13 @@ public abstract class Zombie extends MoveableGameObject {
             if(super.getCurrentFrame() > nFrames -2){
                 stopAnimate();
             }
-            if(timeCounter >deleteTimer){
+            if(timeCounter > deleteTimer){
                 ((Soldier) target).increaseScore(killExp);
+                ZombieControler.nZombies--;
                 deleteThisGameObject();
+
             }
         }
     }
-    /**
-     * Tile collision: monster bounces off all tiles, so use first collision
-     * 
-     * @see android.gameengine.icadroids.objects.collisions.ICollision#collisionOccurred(java.util.List)
-     */
-    
 
 }
