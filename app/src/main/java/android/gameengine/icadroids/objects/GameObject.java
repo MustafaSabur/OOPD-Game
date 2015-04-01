@@ -497,5 +497,9 @@ public class GameObject {
 	public void setDepth(float depth) {
 	    this.depth = depth;
 	}
-	
+
+    public int getCurrentFrame(){
+        return sprite.getCurrentFrameNumber();
+    }
 }
+

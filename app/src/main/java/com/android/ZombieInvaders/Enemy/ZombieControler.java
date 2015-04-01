@@ -2,16 +2,12 @@ package com.android.ZombieInvaders.Enemy;
 
 import android.gameengine.icadroids.alarms.Alarm;
 import android.gameengine.icadroids.alarms.IAlarm;
-import android.gameengine.icadroids.objects.GameObject;
-import android.util.Log;
-
 import com.android.ZombieInvaders.ZombieInvaders;
 
 import java.util.Random;
 
 /**
- * A Controller that generates zombies and puts them into the game
- * randomly.
+ * A Controller that generates zombies and puts them into the game.
  * @author Mustafa Sabur and Okan Ok.
  */
 public class ZombieControler implements IAlarm {
@@ -39,25 +35,15 @@ public class ZombieControler implements IAlarm {
      * Set Alarm for next Zombie.
      */
     public void triggerAlarm(int alarmID) {
-
-        mygame.printDebugInfo("Soldier", "Y: "+ mygame.getSoldier().getY());
-
         int x = r.nextInt(1920);
         int y = (mygame.getSoldier().getY() - 1500);
-//        for (GameObject i: mygame.getItems()){
-//            if (i instanceof Zombie){
-//                nZombies++;
-//            }
-//        }
 
         if (nZombies < maxNZombies) {
             Zombie z = new RegularZombie(mygame.getSoldier());
             mygame.addGameObject(z, x, y);
             nZombies++;
+            mygame.printDebugInfo("zombie", "created");
         }
-        mygame.printDebugInfo("zombie", "created");
-
 	    myAlarm.restartAlarm();
     }
-
 }

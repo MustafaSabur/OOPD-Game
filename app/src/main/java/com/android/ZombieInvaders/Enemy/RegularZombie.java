@@ -1,6 +1,5 @@
 package com.android.ZombieInvaders.Enemy;
 
-import android.gameengine.icadroids.dashboard.DashboardImageView;
 import android.gameengine.icadroids.objects.GameObject;
 import android.gameengine.icadroids.objects.MoveableGameObject;
 
@@ -10,54 +9,49 @@ import com.android.ZombieInvaders.Soldier;
 import java.util.ArrayList;
 
 /**
- * Created by Mustafa Sabur and Okan Ok
+ * @author Mustafa Sabur and Okan Ok
  */
 public class RegularZombie extends Zombie {
 
     //private int timeCounter;
-    //private MoveableGameObject target;
+    private MoveableGameObject target;
 
 
     public RegularZombie(MoveableGameObject target) {
-        super("regularzombie",8);
+        super(target, "rzombie",8, 100, 30);
         this.target = target;
         setAnimationSpeed(3);
         startAnimate();
-        this.timeCounter = 0;
+        //this.timeCounter = 0;
+        setySpeed(5);
 
 
     }
     @Override
     public void update() {
         super.update();
-        setSpeed(5);
+        //setSpeed(5);
 
         //if(getCollidingObject() == target.getCollidingObject()){        }
 
-        timeCounter++;
-        if(timeCounter % 4 == 0) {
-            this.moveTowardsAPoint(target.getX(), target.getY());
-        }
+//        timeCounter++;
+//        if(timeCounter % 4 == 0) {
+//            this.moveTowardsAPoint(target.getX(), target.getY());
+//        }
+//
+//        if(getY() > target.getY() + 200){
+//            deleteThisGameObject();
+//            ZombieControler.nZombies--;
+//            System.out.println("RegularZombie deleted");
+//            ((Soldier)target).increaseScore(10);
+//
+//        }
+        doDeadAction("rzombiedead",7,48);
+        moveToTarget();
+        deleteIfOffScreen();
 
-        if(getY() > target.getY() + 200){
-            deleteThisGameObject();
-            ZombieControler.nZombies--;
-            System.out.println("RegularZombie deleted");
-            ((Soldier)target).increaseScore(10);
 
-        }
 
-        ArrayList<GameObject> gotHit = getCollidedObjects();
-        if (gotHit != null){
-            for (GameObject g: gotHit){
-                if (g instanceof Bullet){
-                    deleteThisGameObject();
-                    g.deleteThisGameObject();
-                    ((Soldier)target).increaseScore(20);
-
-                }
-            }
-        }
     }
 
 

@@ -1,19 +1,12 @@
 package com.android.ZombieInvaders;
 
-import android.gameengine.icadroids.objects.*;
-import android.gameengine.icadroids.objects.collisions.ICollision;
-import android.gameengine.icadroids.objects.collisions.TileCollision;
-
-import com.android.ZombieInvaders.Enemy.RegularZombie;
-import com.android.ZombieInvaders.Enemy.Zombie;
-
-import java.util.ArrayList;
-import java.util.List;
+import android.gameengine.icadroids.objects.MoveableGameObject;
 
 /**
  * Bullet can be fired by the player in a straight line.
+ * @author Mustafa Sabur and Okan Ok
  */
-public class Bullet extends MoveableGameObject{
+public class Bullet extends MoveableGameObject {
 
     /**
      * reference to the game
@@ -25,7 +18,7 @@ public class Bullet extends MoveableGameObject{
      */
     public Bullet(ZombieInvaders mygame) {
         this.mygame = mygame;
-        setSprite("raket");
+        setSprite("icebullet");
         setSpeed(50);
         setDirection(0);
 

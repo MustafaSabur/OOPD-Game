@@ -24,7 +24,6 @@ public class Soldier extends MoveableGameObject implements IAlarm {
     private static boolean ableToFire, ableToDie = true;
     private Alarm fireRate, dyingRate;
     private int walkingspeed = -10;
-    private int slowWalkingspeed = -5;
     private int hp = 3;
 
 	public Soldier(ZombieInvaders mygame)
@@ -41,20 +40,20 @@ public class Soldier extends MoveableGameObject implements IAlarm {
         fireRate.startAlarm();
 	}
 
-//    public static boolean getIsAbleToFire() {
-//        return ableToFire;
-//    }
-//
-//    public static void setAbleToFire(boolean fire) {
-//        ableToFire = fire;
-//    }
-
     public int getAmmo() {
         return ammo;
     }
 
     public void increaseScore(int scoreIncease) {
         score = score + scoreIncease;
+    }
+
+    public int getWalkingspeed() {
+        return walkingspeed;
+    }
+
+    public void setWalkingspeed(int walkingspeed) {
+        this.walkingspeed = walkingspeed;
     }
 
     public Bullet createBullet(){
@@ -73,7 +72,7 @@ public class Soldier extends MoveableGameObject implements IAlarm {
         }
 
         if(getX() < 150 || getX() > (mygame.getScreenWidth() - 280)){
-            setySpeed(slowWalkingspeed);
+            setySpeed(walkingspeed/2);
         }
         else setySpeed(walkingspeed);
 
@@ -93,17 +92,17 @@ public class Soldier extends MoveableGameObject implements IAlarm {
 
                     if (g.getY() < getY() && g.getY() > getY()-100) {
                         ((Zombie) g).setySpeed(walkingspeed / 2);
-                        //System.out.println("Geraakt");
-
-                        if (hp > 0 && ableToDie) {
-                            ableToDie = false;
-                            dyingRate.restartAlarm();
-                            System.out.println("" + hp);
-                            mygame.getHearts().get(hp - 1).setResourceName("empty");
-                            hp--;
-                        } else if (hp <= 0) {
-                            mygame.pause();
-                            mygame.addToDashboard(new DashboardImageView(mygame, "gameover"));
+                        if(!((Zombie)g).checkIfDead()) {
+                            if (hp > 0 && ableToDie) {
+                                ableToDie = false;
+                                dyingRate.restartAlarm();
+                                System.out.println("" + hp);
+                                mygame.getHearts().get(hp - 1).setResourceName("empty");
+                                hp--;
+                            } else if (hp <= 0) {
+                                mygame.pause();
+                                mygame.addToDashboard(new DashboardImageView(mygame, "gameover"));
+                            }
                         }
                     }
 				}
@@ -114,12 +113,10 @@ public class Soldier extends MoveableGameObject implements IAlarm {
 		if (OnScreenButtons.dPadRight && getX() < mygame.getScreenWidth() - 100)
 		{
             movePlayer(10, 0);
-			//setX(getX() + 10);
 		}
 		if (OnScreenButtons.dPadLeft && getX() > -20)
 		{
             movePlayer(-10, 0);
-            //setX(getX() - 10);
 		}
         if (OnScreenButtons.buttonA){
             if(ableToFire && ammo != 0){
@@ -132,27 +129,11 @@ public class Soldier extends MoveableGameObject implements IAlarm {
                 }
                 ammo--;
             }
-
         }
-		
-		// Example of how to use the touch screen.
-		// To use this, comment out the input from OnScreenButtons and MotionSensor 
-		// and switch the use-settings in class ZombieInvaders
-		/*
-		 	// get readings from the TouchInput
-		 	float targetX = TouchInput.xPos;
-		 	float targetY = TouchInput.xPos;
-		 	// When using the viewport, translate screen locations to game world 
-		 	Point p = mygame.translateToGamePosition(targetX, targetY);
-		 	// Move in the direction of the point that has been touched
-			setSpeed(8);
-		 	moveTowardsAPoint(p.x, p.y);
-		*/ 
 	}
 
 	/**
 	 * Get the score
-	 * 
 	 * @return current value of score
 	 */
 	public int getScore()
@@ -170,6 +151,5 @@ public class Soldier extends MoveableGameObject implements IAlarm {
                 ableToDie = true;
                 break;
         }
-
     }
 }
