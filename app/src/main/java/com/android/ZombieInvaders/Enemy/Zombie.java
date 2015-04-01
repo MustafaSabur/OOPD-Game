@@ -47,7 +47,7 @@ public abstract class Zombie extends MoveableGameObject {
     }
 
     public boolean checkIfDead(){
-        if (hp <1){
+        if (hp <= 0){
             return true;
         }
         else{
