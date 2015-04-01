@@ -15,23 +15,24 @@ import com.android.ZombieInvaders.Enemy.Zombie;
 /**
  * Soldier is the main player object of the game. It moves forward through the game.
  * Avoids the zombie objects and tries to kill them with his weapon.
- * when a zombie touches the soldier, he will lose one life.
+ * when levelDisplayTimer zombie touches the soldier, he will lose one life.
  * @author Mustafa Sabur and Okan ok
  */
 public class Soldier extends MoveableGameObject implements IAlarm {
-	private ZombieInvaders mygame;
-	private int score;
-    private int ammo;
-    private static boolean ableToFire, ableToDie = true;
-    private Alarm fireRate, dyingRate;
-    private int walkingspeed = -20;
-    private int hp = 3;
+	private ZombieInvaders mygame; // reference to the game
+	private int score; //score for instance of soldier
+    private int ammo; //amount of ammo left
+    private static boolean ableToFire, ableToDie = true; //whether Soldier can fire or not
+    private Alarm fireRate, dyingRate; //alarm triggers
+    private int walkingspeed = -20; //speed of Soldier
+    private int hp = 3; //hp of Soldier
 
 	public Soldier(ZombieInvaders mygame)
 	{
 		this.mygame = mygame;
 		setSprite("soldier", 8);
         setAnimationSpeed(3);
+        startAnimate();
         setySpeed(walkingspeed);
         ammo = 100;
         score = 0;
@@ -43,6 +44,11 @@ public class Soldier extends MoveableGameObject implements IAlarm {
 
     public int getAmmo() {
         return ammo;
+    }
+
+    public int getScore()
+    {
+        return score;
     }
 
     public void increaseScore(int scoreIncease) {
@@ -57,32 +63,17 @@ public class Soldier extends MoveableGameObject implements IAlarm {
         this.walkingspeed = walkingspeed;
     }
 
-    public Bullet createBullet(){
+    private Bullet createBullet(){
         return new Bullet(mygame, 50 -(walkingspeed));
     }
 
-    /** update 'Soldier': handle collisions and input from buttons / motion sensor */
-	@Override
-	public void update()
-	{
-		super.update();
-
-        super.startAnimate();
-        if(getY() <= 880){
-            setY(getY()+(1080*4 + (walkingspeed)));
-        }
-
-        if(getX() < 150 || getX() > (mygame.getScreenWidth() - 280)){
-            setySpeed(walkingspeed/2);
-        }
-        else setySpeed(walkingspeed);
-
-		// collisions with objects
-		ArrayList<GameObject> gotHit = getCollidedObjects();
-		if (gotHit != null)
-		{
-			for (GameObject g : gotHit)
-			{
+    private void collision(){
+        // collisions with objects
+        ArrayList<GameObject> gotHit = getCollidedObjects();
+        if (gotHit != null)
+        {
+            for (GameObject g : gotHit)
+            {
 //				if (g instanceof Bullet)
 //				{
 //					score = score + ((Bullet) g).getPoints();
@@ -107,19 +98,20 @@ public class Soldier extends MoveableGameObject implements IAlarm {
                             }
                         }
                     }
-				}
-			}
-		}
+                }
+            }
+        }
+    }
 
-		// Handle input.
-		if (OnScreenButtons.dPadRight && getX() < mygame.getScreenWidth() - 100)
-		{
+    private void handleInput(){
+        if (OnScreenButtons.dPadRight && getX() < mygame.getScreenWidth() - 100)
+        {
             movePlayer(10, 0);
-		}
-		if (OnScreenButtons.dPadLeft && getX() > -20)
-		{
+        }
+        if (OnScreenButtons.dPadLeft && getX() > -20)
+        {
             movePlayer(-10, 0);
-		}
+        }
         if (OnScreenButtons.buttonA){
             if(ableToFire && ammo != 0){
                 ableToFire = false;
@@ -132,15 +124,28 @@ public class Soldier extends MoveableGameObject implements IAlarm {
                 ammo--;
             }
         }
-	}
+    }
 
-	/**
-	 * Get the score
-	 * @return current value of score
-	 */
-	public int getScore()
+    /** update 'Soldier': handle collisions and input from buttons / motion sensor */
+	@Override
+	public void update()
 	{
-		return score;
+		super.update();
+
+        //super.startAnimate();
+
+        //soldier position and speed
+        if(getY() <= 880){
+            setY(getY()+(1080*4 + (walkingspeed)));
+        }
+
+        if(getX() < 150 || getX() > (mygame.getScreenWidth() - 280)){
+            setySpeed(walkingspeed/2);
+        }
+        else setySpeed(walkingspeed);
+
+        handleInput();
+        collision();
 	}
 
     @Override

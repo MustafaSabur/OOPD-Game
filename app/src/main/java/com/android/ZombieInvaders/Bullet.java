@@ -3,19 +3,13 @@ package com.android.ZombieInvaders;
 import android.gameengine.icadroids.objects.MoveableGameObject;
 
 /**
- * Bullet can be fired by the player in a straight line.
+ * Bullet can be fired by the player in levelDisplayTimer straight line.
  * @author Mustafa Sabur and Okan Ok
  */
 public class Bullet extends MoveableGameObject {
 
-    /**
-     * reference to the game
-     */
-    private ZombieInvaders mygame;
+    private ZombieInvaders mygame; //reference to the game
 
-    /**
-     * Constructors of Bullet
-     */
     public Bullet(ZombieInvaders mygame, int speed) {
         this.mygame = mygame;
         setSprite("icebullet");
@@ -32,10 +26,7 @@ public class Bullet extends MoveableGameObject {
 
     }
 
-
-    /**
-     * Update Bullet every cycle of the game loop.
-     */
+    /** Update Bullet every cycle of the game loop.*/
     @Override
     public void update() {
         super.update();

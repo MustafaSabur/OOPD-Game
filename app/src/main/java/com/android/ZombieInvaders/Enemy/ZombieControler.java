@@ -2,8 +2,8 @@ package com.android.ZombieInvaders.Enemy;
 
 import android.gameengine.icadroids.alarms.Alarm;
 import android.gameengine.icadroids.alarms.IAlarm;
+import android.util.Log;
 import com.android.ZombieInvaders.ZombieInvaders;
-
 import java.util.Random;
 
 /**
@@ -11,11 +11,11 @@ import java.util.Random;
  * @author Mustafa Sabur and Okan Ok.
  */
 public class ZombieControler implements IAlarm {
-    private ZombieInvaders mygame;
-    private Alarm myAlarm;
-    public static int nZombies;
-    private final int maxNZombies;
-    Random r;
+    private ZombieInvaders mygame; //instance of the game
+    private Alarm myAlarm; //trigger for creating a new Zombie
+    public static int nZombies; //number of active instance of Zombie
+    public static int maxNZombies; //max number of Zombies that can spawn
+    private Random r; //need this to make the spawn positions and the kind of zombie random
 
     /**
      * Create a Controller and set the first Alarm,
@@ -59,6 +59,7 @@ public class ZombieControler implements IAlarm {
             nZombies++;
             mygame.printDebugInfo("zombie", "created");
         }
+        Log.d("Zombie", "max aantal: "+ maxNZombies);
 	    myAlarm.restartAlarm();
     }
 }

@@ -2,6 +2,7 @@ package com.android.ZombieInvaders.Enemy;
 
 import android.gameengine.icadroids.objects.GameObject;
 import android.gameengine.icadroids.objects.MoveableGameObject;
+import android.util.Log;
 
 import com.android.ZombieInvaders.Bullet;
 import com.android.ZombieInvaders.Soldier;
@@ -73,7 +74,7 @@ public abstract class Zombie extends MoveableGameObject {
         if (gotHit != null &&isDiying == false){
             for (GameObject g: gotHit){
                 if (g instanceof Bullet){
-                    hp = 0;
+                    hp -= 100;
                     g.deleteThisGameObject();
                     isDiying = true;
                     if(hp > 0){
@@ -87,6 +88,7 @@ public abstract class Zombie extends MoveableGameObject {
     public void deleteIfOffScreen(){
         if(getY() > target.getY() + 200){
             deleteThisGameObject();
+            Log.d("Zombie", "deleted");
             ZombieControler.nZombies--;
             if(checkIfDead()){
                 ((Soldier)target).increaseScore(killExp);
@@ -117,9 +119,9 @@ public abstract class Zombie extends MoveableGameObject {
             }
             if(timeCounter > deleteTimer){
                 ((Soldier) target).increaseScore(killExp);
-                ZombieControler.nZombies--;
                 deleteThisGameObject();
-
+                ZombieControler.nZombies--;
+                Log.d("Zombie", "deleted");
             }
         }
     }

@@ -10,10 +10,9 @@ import android.gameengine.icadroids.input.MotionSensor;
 import android.gameengine.icadroids.input.OnScreenButtons;
 import android.gameengine.icadroids.input.TouchInput;
 import android.gameengine.icadroids.sound.MusicPlayer;
+import android.graphics.Color;
 import android.view.View;
-
 import com.android.ZombieInvaders.Enemy.ZombieControler;
-
 import java.util.ArrayList;
 
 /**
@@ -25,11 +24,10 @@ public class ZombieInvaders extends GameEngine implements IAlarm{
 	private Soldier soldier; // MoveableGmeObject Soldier, player in the game
 	private View scoreDisplay, ammoDisplay, levelDisplay; //Dashboard for displaying the score and ammo.
     private ZombieControler zombieControler; //Controller how many Zombies are spawned en how fast.
-    private ArrayList<DashboardImageView> hearts = new ArrayList<>(); //Holds a list of players hearts(life).
+    private ArrayList<DashboardImageView> hearts = new ArrayList<>(); //Holds levelDisplayTimer list of players hearts(life).
     private static int level = 2; //Game level.
-    private int prevScore = 0;
-    private Alarm alarm= new Alarm(7, 10, this);
-    private boolean newMap = false;
+    private int prevScore = 0; //Score of last level.
+    Alarm levelDisplayTimer = new Alarm(1, 20, this);
 
     /**Initialize the game, create objects and level*/
 	@Override
@@ -91,6 +89,7 @@ public class ZombieInvaders extends GameEngine implements IAlarm{
         levelDisplay = new DashboardTextView(this);
         addToDashboard(levelDisplay);
         ZombieLand.createDashboard(levelDisplay, 700, 500, 200);
+        levelDisplay.setBackgroundColor(Color.TRANSPARENT);
 
         //create new dashboard
         addDashboard();
@@ -105,6 +104,25 @@ public class ZombieInvaders extends GameEngine implements IAlarm{
         return hearts;
     }
 
+    private void changeLevels(){
+        boolean newMap = false;
+
+        if (soldier.getScore() >= prevScore + 50) {
+            prevScore = soldier.getScore();
+            level++;
+            ZombieControler.maxNZombies++;
+            if (level % 3 == 0) newMap = true;
+            ((DashboardTextView)levelDisplay).setTextString(" Level: " + String.valueOf(level));
+            levelDisplayTimer.restartAlarm();
+            soldier.setWalkingspeed(soldier.getWalkingspeed() - 5);
+        }
+        if (newMap){
+            newMap = false;
+            setTileMap(ZombieLand.createTileEnvironment(level));
+            setBackground(ZombieLand.bgImage(level));
+        }
+    }
+
 
 	/**Update the game.*/
 	@Override
@@ -112,32 +130,14 @@ public class ZombieInvaders extends GameEngine implements IAlarm{
 		super.update();
         ((DashboardTextView)scoreDisplay).setTextString(" Score: " + String.valueOf(this.soldier.getScore()));
         ((DashboardTextView)ammoDisplay).setTextString(" Ammo: " + String.valueOf(this.soldier.getAmmo()));
-        if (soldier.getScore() >= prevScore + 50) {
-            prevScore = soldier.getScore();
-            level++;
-            if (level % 3 == 0) newMap = true;
-            ((DashboardTextView)levelDisplay).setTextString(" Level: " + String.valueOf(level));
 
-            soldier.setWalkingspeed(soldier.getWalkingspeed() - 5);
-            alarm.startAlarm();
-            printDebugInfo("hmm", "hmm1");
-            pause();
-            printDebugInfo("hmm", "hmm2");
-            addAlarm(alarm);
-            resume();
-        }
-        if (newMap){
-            newMap = false;
-            setTileMap(ZombieLand.createTileEnvironment(level));
-            setBackground(ZombieLand.bgImage(level));
-        }
-        printDebugInfo("hmm", "hmm5");
+        changeLevels();
 
     }
 
     @Override
     public void triggerAlarm(int alarmID) {
-        //resume();
-        //printDebugInfo("hmm", "hmm");
+        ((DashboardTextView)levelDisplay).setTextString("");
     }
 }
+
