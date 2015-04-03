@@ -16,30 +16,23 @@ import java.util.ArrayList;
  * @author Mustafa Sabur and Okan Ok
  */
 public abstract class Zombie extends MoveableGameObject {
-    
+
     /**
      * counts time (that is calls on update()). Using the counter, we can create
      * behaviour at certain updates only, instead of always.
      */
     private int moveCounter;
     protected int timeCounter;
-
     private int hp;
-    private boolean isDiying;
+    private boolean isDiying, deadAnimate;
     private int killExp;
-    
-    /**
-     * The MoveableGameObject to be chased
-     */
-    protected MoveableGameObject target;
+    protected Soldier target; //The MoveableGameObject to be chased
 
     /**
      * Create a Zombie
-     * 
-     * @param target 
-     * 		the MoveableGameObject to be chased
+     * @param target the MoveableGameObject to be chased
      */
-    public Zombie(MoveableGameObject target,String sprite, int nFrames, int hp, int killExp) {
+    public Zombie(Soldier target,String sprite, int nFrames, int hp, int killExp) {
         setSprite(sprite, nFrames);
         this.timeCounter = 0;
         this.target = target;
@@ -47,7 +40,7 @@ public abstract class Zombie extends MoveableGameObject {
         this.killExp = killExp;
     }
 
-    public boolean checkIfDead(){
+    public boolean isDead(){
         if (hp <= 0){
             return true;
         }
@@ -56,12 +49,6 @@ public abstract class Zombie extends MoveableGameObject {
         }
     }
 
-    /**
-     * update: change direction to target every 4th step only.
-     * 
-     * @see android.gameengine.icadroids.objects.MoveableGameObject#update()
-     */
-    @Override
     public void update() {
         super.update();
 
@@ -86,39 +73,36 @@ public abstract class Zombie extends MoveableGameObject {
         }
     }
     public void deleteIfOffScreen(){
-        if(getY() > target.getY() + 200){
+        if(getY() > target.getY() + 200 || getX() < - 200 || getX() > 1920){
             deleteThisGameObject();
             Log.d("Zombie", "deleted");
             ZombieControler.nZombies--;
-            if(checkIfDead()){
-                ((Soldier)target).increaseScore(killExp);
-            }
-            else {
-                ((Soldier)target).increaseScore(10);
-            }
+            if(isDead()) target.increaseScore(killExp);
+            else target.increaseScore(5);
         }
     }
 
-    public void moveToTarget(){
+    public void moveToTarget(int reaction){
         moveCounter++;
-        if(moveCounter % 4 == 0 && !checkIfDead()) {
+        if(moveCounter % reaction == 0 && !isDead()) {
             this.moveTowardsAPoint(target.getX(), target.getY());
         }
     }
 
     public void doDeadAction(String spriteName, int nFrames, int deleteTimer){
-        if(checkIfDead()){
+        if(isDead()){
             timeCounter ++;
-            if(timeCounter  == 2) {
+            if(timeCounter  == 2 && deadAnimate == false) {
                 super.setSprite(spriteName, nFrames);
                 super.setFrameNumber(0);
                 super.setSpeed(0);
+                deadAnimate = true;
             }
-            if(super.getCurrentFrame() > nFrames -2){
+            if(super.getCurrentFrame() > nFrames -2  && deadAnimate == true){
                 stopAnimate();
             }
             if(timeCounter > deleteTimer){
-                ((Soldier) target).increaseScore(killExp);
+                target.increaseScore(killExp);
                 deleteThisGameObject();
                 ZombieControler.nZombies--;
                 Log.d("Zombie", "deleted");

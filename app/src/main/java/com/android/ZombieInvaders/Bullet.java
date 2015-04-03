@@ -9,21 +9,27 @@ import android.gameengine.icadroids.objects.MoveableGameObject;
 public class Bullet extends MoveableGameObject {
 
     private ZombieInvaders mygame; //reference to the game
+    private MoveableGameObject shooter;
 
-    public Bullet(ZombieInvaders mygame, int speed) {
+    public Bullet(ZombieInvaders mygame, int speed, MoveableGameObject shooter) {
         this.mygame = mygame;
         setSprite("icebullet");
         setSpeed(speed);
         setDirection(0);
+        this.shooter = shooter;
 
     }
 
-    public Bullet(ZombieInvaders mygame, String image, int speed, int direction) {
+    public Bullet(ZombieInvaders mygame, String image, int speed, int direction, MoveableGameObject shooter) {
 	    this.mygame = mygame;
 	    setSprite(image);
         setSpeed(speed);
         setDirection(direction);
+        this.shooter = shooter;
+    }
 
+    public MoveableGameObject getShooter() {
+        return shooter;
     }
 
     /** Update Bullet every cycle of the game loop.*/

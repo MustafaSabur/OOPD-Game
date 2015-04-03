@@ -1,7 +1,6 @@
-package com.android.ZombieInvaders;
+ package com.android.ZombieInvaders;
 
 import java.util.ArrayList;
-
 import android.gameengine.icadroids.alarms.Alarm;
 import android.gameengine.icadroids.alarms.IAlarm;
 import android.gameengine.icadroids.dashboard.DashboardImageView;
@@ -9,7 +8,6 @@ import android.gameengine.icadroids.input.OnScreenButtons;
 import android.gameengine.icadroids.objects.GameObject;
 import android.gameengine.icadroids.objects.MoveableGameObject;
 import android.gameengine.icadroids.sound.MusicPlayer;
-
 import com.android.ZombieInvaders.Enemy.Zombie;
 
 /**
@@ -24,7 +22,7 @@ public class Soldier extends MoveableGameObject implements IAlarm {
     private int ammo; //amount of ammo left
     private static boolean ableToFire, ableToDie = true; //whether Soldier can fire or not
     private Alarm fireRate, dyingRate; //alarm triggers
-    private int walkingspeed = -20; //speed of Soldier
+    private int walkingspeed = -5; //speed of Soldier
     private int hp = 3; //hp of Soldier
 
 	public Soldier(ZombieInvaders mygame)
@@ -34,7 +32,7 @@ public class Soldier extends MoveableGameObject implements IAlarm {
         setAnimationSpeed(3);
         startAnimate();
         setySpeed(walkingspeed);
-        ammo = 100;
+        ammo = 10;
         score = 0;
         fireRate = new Alarm(5, 15, this);
         dyingRate = new Alarm(6, 15, this);
@@ -46,8 +44,11 @@ public class Soldier extends MoveableGameObject implements IAlarm {
         return ammo;
     }
 
-    public int getScore()
-    {
+    public void setAmmo(int ammo) {
+        this.ammo = ammo;
+    }
+
+    public int getScore(){
         return score;
     }
 
@@ -64,26 +65,17 @@ public class Soldier extends MoveableGameObject implements IAlarm {
     }
 
     private Bullet createBullet(){
-        return new Bullet(mygame, 50 -(walkingspeed));
+        return new Bullet(mygame, 50 -(walkingspeed), this);
     }
 
     private void collision(){
         // collisions with objects
         ArrayList<GameObject> gotHit = getCollidedObjects();
-        if (gotHit != null)
-        {
-            for (GameObject g : gotHit)
-            {
-//				if (g instanceof Bullet)
-//				{
-//					score = score + ((Bullet) g).getPoints();
-//					Log.d("hapje!!!", "score is nu " + score);
-//					mygame.deleteGameObject(g);
-//				} else
+        if (gotHit != null){
+            for (GameObject g : gotHit){
                 if (g instanceof Zombie){
-
                     if (g.getY() < getY() && g.getY() > getY()-100) {
-                        if(!((Zombie)g).checkIfDead()) {
+                        if(!((Zombie)g).isDead()) {
                             ((Zombie) g).setySpeed(walkingspeed / 2);
                             if (hp > 0 && ableToDie) {
                                 ableToDie = false;
@@ -91,26 +83,33 @@ public class Soldier extends MoveableGameObject implements IAlarm {
                                 System.out.println("" + hp);
                                 mygame.getHearts().get(hp - 1).setResourceName("empty");
                                 hp--;
-                            } else if (hp <= 0) {
-                                mygame.pause();
-                                mygame.addToDashboard(new DashboardImageView(mygame, "gameover"));
-                                MusicPlayer.stop();
                             }
                         }
                     }
                 }
+                else if(g instanceof Bullet){
+                    if (hp > 0 && ableToDie && ((Bullet) g).getShooter() != this) {
+                        ableToDie = false;
+                        g.deleteThisGameObject();
+                        dyingRate.restartAlarm();
+                        System.out.println("" + hp);
+                        mygame.getHearts().get(hp - 1).setResourceName("empty");
+                        hp--;
+                    }
+                }                
             }
         }
     }
 
-    private void handleInput(){
+    private void handleInput() {
+        // Handle input.
         if (OnScreenButtons.dPadRight && getX() < mygame.getScreenWidth() - 100)
         {
-            movePlayer(10, 0);
+            movePlayer(15, 0);
         }
         if (OnScreenButtons.dPadLeft && getX() > -20)
         {
-            movePlayer(-10, 0);
+            movePlayer(-15, 0);
         }
         if (OnScreenButtons.buttonA){
             if(ableToFire && ammo != 0){
@@ -119,7 +118,7 @@ public class Soldier extends MoveableGameObject implements IAlarm {
                 mygame.addGameObject(createBullet(), (int) getCenterX(), (int) getCenterY() - 100);
                 mygame.vibrate(100);
                 if(getY() <= mygame.getScreenHeight()*2 - 200){
-                    mygame.addGameObject(createBullet(), (int) getCenterX(),(int) getCenterY()+(mygame.getScreenHeight()*4 - 100));
+                    mygame.addGameObject(createBullet(), (int) getCenterX(), (int) getCenterY()+(mygame.getScreenHeight()*4 - 100));
                 }
                 ammo--;
             }
@@ -128,8 +127,7 @@ public class Soldier extends MoveableGameObject implements IAlarm {
 
     /** update 'Soldier': handle collisions and input from buttons / motion sensor */
 	@Override
-	public void update()
-	{
+	public void update(){
 		super.update();
 
         //super.startAnimate();
@@ -143,6 +141,12 @@ public class Soldier extends MoveableGameObject implements IAlarm {
             setySpeed(walkingspeed/2);
         }
         else setySpeed(walkingspeed);
+
+        if (hp <= 0) {
+            mygame.pause();
+            mygame.addToDashboard(new DashboardImageView(mygame, "gameover"));
+            MusicPlayer.stop();
+        }
 
         handleInput();
         collision();

@@ -2,13 +2,15 @@ package com.android.ZombieInvaders.Enemy;
 
 import android.gameengine.icadroids.objects.MoveableGameObject;
 
+import com.android.ZombieInvaders.Soldier;
+
 /**
  * @author Mustafa Sabur and Okan Ok
  */
 public class RegularZombie extends Zombie {
 
-    public RegularZombie(MoveableGameObject target) {
-        super(target, "rzombie",8, 100, 30);
+    public RegularZombie(Soldier target) {
+        super(target, "rzombie",8, 100, 20);
         this.target = target;
         setAnimationSpeed(3);
         startAnimate();
@@ -37,7 +39,7 @@ public class RegularZombie extends Zombie {
 //
 //        }
         doDeadAction("rzombiedead",7,48);
-        moveToTarget();
+        moveToTarget(4);
         deleteIfOffScreen();
 
 

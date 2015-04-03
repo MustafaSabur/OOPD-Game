@@ -68,7 +68,7 @@ public class ZombieLand{
 
         if(d instanceof DashboardTextView) {
             ((DashboardTextView)d).setTextSize(TypedValue.COMPLEX_UNIT_DIP, 24);
-            ((DashboardTextView)d).setTextColor(Color.GREEN);
+            ((DashboardTextView)d).setTextColor(Color.RED);
             ((DashboardTextView)d).setWidgetBackgroundColor(Color.argb(170, 150, 100, 100));
             ((DashboardTextView)d).setWidgetX(x);
             ((DashboardTextView)d).setWidgetY(y);
@@ -84,7 +84,7 @@ public class ZombieLand{
 
     public static String bgImage(int level){
         if (level == 3){
-            return "empty";
+            return "backgroundstreet";
         }
         else return "backgroundgrass";
     }

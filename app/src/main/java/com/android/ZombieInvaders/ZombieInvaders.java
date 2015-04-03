@@ -23,11 +23,10 @@ public class ZombieInvaders extends GameEngine implements IAlarm{
 
 	private Soldier soldier; // MoveableGmeObject Soldier, player in the game
 	private View scoreDisplay, ammoDisplay, levelDisplay; //Dashboard for displaying the score and ammo.
-    private ZombieControler zombieControler; //Controller how many Zombies are spawned en how fast.
     private ArrayList<DashboardImageView> hearts = new ArrayList<>(); //Holds levelDisplayTimer list of players hearts(life).
-    private static int level = 2; //Game level.
+    private static int level = 1; //Game level.
     private int prevScore = 0; //Score of last level.
-    Alarm levelDisplayTimer = new Alarm(1, 20, this);
+    private Alarm levelDisplayTimer = new Alarm(1, 20, this);
 
     /**Initialize the game, create objects and level*/
 	@Override
@@ -52,7 +51,8 @@ public class ZombieInvaders extends GameEngine implements IAlarm{
         MusicPlayer.play("doomtheme", true);
 
         //create zombies
-        zombieControler = new ZombieControler(this, 20, 3);
+        @SuppressWarnings("UnusedDeclaration")
+        ZombieControler zombieControler = new ZombieControler(this, 3);
 
 
         // Switch viewport on
@@ -107,16 +107,18 @@ public class ZombieInvaders extends GameEngine implements IAlarm{
     private void changeLevels(){
         boolean newMap = false;
 
-        if (soldier.getScore() >= prevScore + 50) {
+        if (soldier.getScore() >= prevScore + 100) {
             prevScore = soldier.getScore();
             level++;
+            soldier.setAmmo(soldier.getAmmo() + 5);
             ZombieControler.maxNZombies++;
             if (level % 3 == 0) newMap = true;
             ((DashboardTextView)levelDisplay).setTextString(" Level: " + String.valueOf(level));
             levelDisplayTimer.restartAlarm();
-            soldier.setWalkingspeed(soldier.getWalkingspeed() - 5);
+            soldier.setWalkingspeed((int)(soldier.getWalkingspeed() *1.20));
         }
         if (newMap){
+            //noinspection UnusedAssignment
             newMap = false;
             setTileMap(ZombieLand.createTileEnvironment(level));
             setBackground(ZombieLand.bgImage(level));
@@ -130,9 +132,7 @@ public class ZombieInvaders extends GameEngine implements IAlarm{
 		super.update();
         ((DashboardTextView)scoreDisplay).setTextString(" Score: " + String.valueOf(this.soldier.getScore()));
         ((DashboardTextView)ammoDisplay).setTextString(" Ammo: " + String.valueOf(this.soldier.getAmmo()));
-
         changeLevels();
-
     }
 
     @Override
